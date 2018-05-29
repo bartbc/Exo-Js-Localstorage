@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <title>Page 3</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+    <div><!-- zone d'edition -->
+        <form action="" id='saisies'>
+            <input type="text" value="rouge" id="nomCouleur">
+            <input type="text" value="#000000" id="hexaCouleur">
+        </form>
+        <form action="" id='buttons'>
+            <input type="button" value="ecrire">
+            <!-- <input type="button" value="lire"> -->
+            <input type="button" value="réintialiser" id='reinit' >
+        </form>
+        <form action="">
+            <label for="zoneSelect">Pour lire une valeur, sélectionnez ci-dessous, "clic" pour la supprimer</label></br>
+            <select name="" id="zoneSelect">
+                <option value="start">Choisir la valeur à afficher</option> 
+            </select>
+            <input type="button" value="effacer" id='effacer'>
+        </form>
+    </div>
+    <div><!-- zone de prévisualisation -->
+        <textarea name="" id="zoneAffich" cols="10" rows="2">
+        </textarea>
+    </div>
+    <script>           
+        // lit tout le localstorage et l'ajoute au select (par défaut au demmarrage)
+        select = document.getElementById('zoneSelect');
+        for(i=0; i<localStorage.length; i++) {
+            var opt = document.createElement('option');             
+            var coul=localStorage.key(i);
+            var hexaCouleur=localStorage.getItem(coul);
+            var val=coul+' / '+hexaCouleur;
+            opt.value = i;
+            opt.innerHTML = val;
+            select.appendChild(opt);
+        }
+        // ajout listener sur select pour lecture
+        var el=document.getElementById('zoneSelect');
+        el.addEventListener('change', (event) => {
+            lire(event.target.value);// lecture apres selection
+        });
+        //ajout listener sur effacer
+        var el=document.getElementById('effacer');
+        el.addEventListener('click', (event) => {
+            var valSelect=document.getElementById('zoneSelect').value;
+            effacer(valSelect);// lecture apres selection
+        });
+        //ajout listeners sur le formulaire buttons
+        for (i=0; i<document.forms['buttons'].length; i++) {
+            var el=document.forms['buttons'].elements[i];
+            el.addEventListener('click', (event) => {
+                event.preventDefault();//desactive le comportement par défaut du button
+                switch (event.target.value) {
+                    case 'ecrire':
+                        ecrire();
+                        break;  
+                    // case 'lire':               
+                    //     lire();
+                    //     break;  
+                    // case 'effacer':
+                    //     effacer();
+                    //     break;
+                    case 'réintialiser':
+                        reinit();
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+        function ecrire() {
+            var coul=document.forms['saisies'].elements['nomCouleur'].value;
+            var hexaCouleur=document.forms['saisies'].elements['hexaCouleur'].value;
+            localStorage.setItem(coul, hexaCouleur);
+            document.location.reload(true);
+        }
+        function lire(maKey) {
+            var coul=localStorage.key(maKey);
+            var hexaCouleur=localStorage.getItem(coul);
+            document.getElementById('zoneAffich').value=coul+"\n"+hexaCouleur;// afichage de la valeur sélectionnée
+        }
+        function effacer(maKey) {
+            var coul=localStorage.key(maKey);
+            localStorage.removeItem(coul);
+            document.location.reload(true);
+        }
+        function reinit() {
+            localStorage.clear();
+            document.location.reload(true);
+        }
+    </script>
+</body>
+</html>
+<!-- ### Exercice 3
+    * Dans un nouveau document hmtml, créer une interface avec deux zones : 
+        - Zone d'édition 
+        - Zone de prévisualisation
+####       
+    * Dans la zone édition, créer un formulaire contenat deux champs de saisie texte :
+        - nom
+        - valeur
+#### 
+    * Créer également, en dessous des champs, quatre boutons :
+        - ecrire
+        - lire 
+        - effacer
+        - réinitialiser
+#### 
+    * Utiliser "ecrire" pour stocker :
+        - "nom" et "valeur"
+    * Utiliser "lire" pour afficher dans la zone prévisualisation :
+        - "nom" et "valeur"
+    * Utiliser "effacer" pour lire le "nom" et effacer le coulpe "nom" "valeur" du localstorage.
+    * Utiliser "réinitialiser" pour effacer toutes les données dans le localstorage. -->

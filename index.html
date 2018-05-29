@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <form action="" name="formulaire">
+            <label for="couleur">Choix de la couleur</label>
+            <input type="text" name="nomCouleur" value="red" id="nomCouleur">
+            <input type="color" name="hexaCouleur" id="hexaCouleur">
+            <input type="button" value="enregistrement" name="buttonEnr" id="buttonEnr">
+            <input type="button" value="Afficher le nombre de clic" name="buttonNbrClic" id="buttonNbrClic">
+            <label for="buttonNbrClic" id="labelButtonClic"></label>
+        </form>
+    </main>
+    <footer>
+    </footer>
+    <script>
+        // ### Exercice 1
+        // * Dans un document html écrire le script qui permet de stocker le nom d'une couleur et sa valeur hexadécimale.
+        // * crée un bouton contenant un lien vers une autre page.
+        //     Sur la page 2, afficher le nom de la couleur et sa valeur hexadécimale.
+        var ele = document.getElementsByName('buttonEnr')[0];
+        ele.addEventListener('click', function (event) {
+            var coul=document.forms['formulaire'].elements['nomCouleur'].value;
+            var hexaCouleur=document.forms['formulaire'].elements['hexaCouleur'].value;
+            localStorage.setItem(0, coul);
+            localStorage.setItem(1, hexaCouleur);
+            window.open('page2.html');
+            //// test !!!!!!!
+            // localStorage.setItem(coul,hexaCouleur);
+            // alert('la nième clé présent est :'+(localStorage.length-1)+' '+localStorage.key(localStorage.length-1));
+        });
+        // ### Exercice 2
+        // * Sur la même page 1, créer un bouton qui permet d'afficher dans une balise le nombre de fois que l'on a cliqué dessus. 
+        // * Pour cela sockker et modifier la valeur dans le localstorage à chaque clic.
+        ele = document.getElementById('buttonNbrClic');
+        ele.addEventListener('click', function (event) {
+            event.preventDefault();//desactive le comportement par défaut du button 
+            var nbreClic=localStorage.getItem('cptClic');
+            //init compteur-clic sur BD si elle n'existe pas
+            if (nbreClic===null) {
+                localStorage.setItem('cptClic',0);
+            } 
+            nbreClic=(Number.parseInt(localStorage.getItem('cptClic')))+1;
+            localStorage.setItem('cptClic', nbreClic);//mise à jour nb de clic            
+            // on ajoute le contenu dans la balise p
+            var newContent = 'Nombre de clic : '+localStorage.getItem('cptClic'); 
+            document.getElementById('labelButtonClic').innerHTML = newContent;
+           });          
+    </script>
+</body>
+</html>
